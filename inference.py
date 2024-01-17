@@ -4,7 +4,7 @@ import argparse
 
 def inference(path_to_checkpoint, path_to_image_src):
     model = YOLO(path_to_checkpoint)
-    model.predict(path_to_image_src, save=True, imgsz=640, conf=0.5)
+    model.predict(path_to_image_src, save=True, imgsz=640, conf=0.6)
 
 
 if __name__ == '__main__':
