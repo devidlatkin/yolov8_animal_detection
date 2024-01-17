@@ -1,0 +1,4 @@
+train: /home/devid/Documents/all_docs/personal/bayanat/yolo_datasets/train/images
+val: /home/devid/Documents/all_docs/personal/bayanat/yolo_datasets/test/images
+nc: 1
+names: ['Animal']
