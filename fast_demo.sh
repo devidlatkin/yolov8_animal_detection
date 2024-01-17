@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Download and unpack the model
-
+file_directory=$(dirname "$0")
 model_name="2024_01_17_animals_detection"
 archive_name="$model_name.tar.gz"
-models_storage_path="./runs/detect"
+models_storage_path="$file_directory/runs/detect"
 inference_model_path="$models_storage_path/$model_name/weights/best.pt"
 model_id="1Ie4y0eEgrpFHgfYld4Gl4nbp6zN0qn-Y"
 
@@ -29,5 +29,13 @@ else
     cd ../..
 fi
 
+
+if [ -z "$1" ]; then
+    # No argument provided, use default inference path
+    inference_path="./datasets/inference_dataset"
+else
+    inference_path=$1
+fi
+
 #  Run the inference
-python inference.py
+python inference.py --image_src $inference_path
