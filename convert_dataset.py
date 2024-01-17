@@ -2,13 +2,8 @@ import os
 import glob
 import shutil
 import imagesize
+import argparse
 
-# path_to_dataset = '/home/devid/Documents/all_docs/personal/bayanat/train'
-path_to_dataset = '/home/devid/Documents/all_docs/personal/bayanat/test'
-
-
-# path_to_save = '/home/devid/Documents/all_docs/personal/bayanat/yolo_datasets/train'
-path_to_save = '/home/devid/Documents/all_docs/personal/bayanat/yolo_datasets/test'
 
 ANIMALS_CLASS_ID = 0  # We have only 1 animals class id
 
@@ -32,11 +27,10 @@ def get_yolo_annotation(img_path, label_path):
         labels = [string for string in labels if string]  # remove empty strings
         for label in labels:
             label = label.split(' ')
-            print('label', label)
             try:
                 float(label[1])
             except:
-                ''' If we have multiple classes inside one bbox or bbox is not defined, skip the sample '''
+                ''' If we have multiple classes inside one bbox or bbox is not well-defined, skip the sample '''
                 return None
             x1, y1, x2, y2 = list(map(float, label[1:]))
             yolo_label = [str(ANIMALS_CLASS_ID), *list(map(str, convert_to_yolo_format(x1, y1, x2, y2, width, height)))]
@@ -44,7 +38,7 @@ def get_yolo_annotation(img_path, label_path):
     return yolo_labels
 
 
-def convert_dataset_to_yolo_dataset():
+def convert_dataset_to_yolo_dataset(path_to_dataset, path_to_save):
     classes_names = os.listdir(path_to_dataset)
     class_to_id_map = dict()
     for i in range(len(classes_names)):
@@ -59,7 +53,6 @@ def convert_dataset_to_yolo_dataset():
         os.makedirs(path_to_save_labels)
 
     for class_name in classes_names:
-        print(f'Converting {class_name}...')
         curr_img_paths = glob.glob(os.path.join(path_to_dataset, class_name, '*'))
         for img_path in curr_img_paths:
             if not os.path.isfile(img_path):
@@ -75,3 +68,29 @@ def convert_dataset_to_yolo_dataset():
             with open(os.path.join(path_to_save_labels, os.path.basename(label_path)), 'w') as file:
                 for string in yolo_labels:
                     file.write(string + '\n')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='')
+
+    # Add arguments
+    parser.add_argument('--read_path', type=str, default='./datasets/animals_detection',
+                        help='The path to animals detection dataset.')
+    parser.add_argument('--save_path', type=str, default='./datasets/yolo_animals_detection',
+                        help='The path to save converted dataset.')
+    args = parser.parse_args()
+
+    if not os.path.isdir(args.read_path):
+        print(f'Dataset path {args.read_path} is not exists! Please download it here or use the custom path.')
+
+    path_to_read_train_dataset = os.path.join(args.read_path, 'train')
+    path_to_read_test_dataset = os.path.join(args.read_path, 'test')
+
+    path_to_save_train_dataset = os.path.join(args.save_path, 'train')
+    path_to_save_test_dataset = os.path.join(args.save_path, 'test')
+
+    print('Converting train datasets...')
+    convert_dataset_to_yolo_dataset(path_to_read_train_dataset, path_to_save_train_dataset)
+    print('Converting test datasets...')
+    convert_dataset_to_yolo_dataset(path_to_read_test_dataset, path_to_save_test_dataset)
+    print('Dataset was successfully converted!')

@@ -1,18 +1,20 @@
 from ultralytics import YOLO
-
-model = YOLO('runs/detect/train/weights/best.pt')
-
-
-# results = model(['/home/devid/Documents/all_docs/personal/bayanat/task_share/test/animals/animal_1.jpg', '/home/devid/Documents/all_docs/personal/bayanat/task_share/test/animals/animal_2.jpg'])  # return a list of Results objects
-# results = model('/home/devid/Documents/all_docs/personal/bayanat/task_share/test/animals/')  # return a list of Results objects
-#
-# print(results)
-# # Process results list
-# for result in results:
-#     boxes = result.boxes  # Boxes object for bbox outputs
-#     masks = result.masks  # Masks object for segmentation masks outputs
-#     keypoints = result.keypoints  # Keypoints object for pose outputs
-#     probs = result.probs  # Probs object for classification outputs
+import argparse
 
 
-model.predict('/home/devid/Documents/all_docs/personal/bayanat/task_share/test/animals/', save=True, imgsz=640, conf=0.5)
+def inference(path_to_checkpoint, path_to_image_src):
+    model = YOLO(path_to_checkpoint)
+    model.predict(path_to_image_src, save=True, imgsz=640, conf=0.5)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='')
+
+    # Add arguments
+    parser.add_argument('--checkpoint_path', type=str, default='./runs/detect/2024_01_17_animals_detection/weights/best.pt',
+                        help='The path to read a checkpoint')
+    parser.add_argument('--image_src', type=str, default='./datasets/inference_dataset',
+                        help='The path to directory of image/video to the inference')
+    args = parser.parse_args()
+
+    inference(args.checkpoint_path, args.image_src)
