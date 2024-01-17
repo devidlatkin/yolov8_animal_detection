@@ -5,8 +5,8 @@ https://www.kaggle.com/datasets/antoreepjana/animals-detection-images-dataset
 ```
 
 Examples:
-![thomas-evans-NVXY8_M1n40-unsplash.jpg](runs%2Fdetect%2Fpredict%2Fthomas-evans-NVXY8_M1n40-unsplash.jpg)
-![boris-smokrovic-lyvCvA8sKGc-unsplash.jpg](runs%2Fdetect%2Fpredict%2Fboris-smokrovic-lyvCvA8sKGc-unsplash.jpg)
+![thomas-evans-NVXY8_M1n40-unsplash.jpg](datasets%2Fresults%2Fthomas-evans-NVXY8_M1n40-unsplash.jpg)
+![boris-smokrovic-lyvCvA8sKGc-unsplash.jpg](datasets%2Fresults%2Fboris-smokrovic-lyvCvA8sKGc-unsplash.jpg)
 
 Preinstallations:
 ```bash
